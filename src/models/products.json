@@ -1,0 +1,152 @@
+[
+  {
+    "title": "leche",
+    "description": "entera",
+    "code": "abc121",
+    "price": 200,
+    "status": "true",
+    "stock": 35,
+    "category": "Cat A",
+    "thumbnail": [
+      {
+        "imagen1": "enlace1"
+      }
+    ],
+    "id": 1
+  },
+  {
+    "title": "manteca",
+    "description": "grasosa",
+    "code": "abc122",
+    "price": 150,
+    "status": "true",
+    "stock": 30,
+    "category": "Cat A",
+    "thumbnail": [
+      {
+        "imagen1": "enlace1"
+      }
+    ],
+    "id": 2
+  },
+  {
+    "title": "dulce de leche",
+    "description": "el mas rico",
+    "code": "abc123",
+    "price": 170,
+    "status": "true",
+    "stock": 40,
+    "category": "Cat A",
+    "thumbnail": [
+      {
+        "imagen1": "enlace1"
+      }
+    ],
+    "id": 3
+  },
+  {
+    "title": "detergente",
+    "description": "con mucha espuma",
+    "code": "abc124",
+    "price": 115,
+    "status": "true",
+    "stock": 20,
+    "category": "Cat B",
+    "thumbnail": [
+      {
+        "imagen1": "enlace1"
+      }
+    ],
+    "id": 4
+  },
+  {
+    "title": "lavandina",
+    "description": "desinfecta todo",
+    "code": "abc125",
+    "price": 85,
+    "status": "true",
+    "stock": 25,
+    "category": "Cat B",
+    "thumbnail": [
+      {
+        "imagen1": "enlace1"
+      }
+    ],
+    "id": 5
+  },
+  {
+    "title": "cera para piso",
+    "description": "brillosa",
+    "code": "abc126",
+    "price": 220,
+    "status": "true",
+    "stock": 50,
+    "category": "Cat B",
+    "thumbnail": [
+      {
+        "imagen1": "enlace1"
+      }
+    ],
+    "id": 6
+  },
+  {
+    "title": "fideo moñito",
+    "description": "riquisimos",
+    "code": "abc127",
+    "price": 160,
+    "status": "true",
+    "stock": 60,
+    "category": "Cat C",
+    "thumbnail": [
+      {
+        "imagen1": "enlace1"
+      }
+    ],
+    "id": 7
+  },
+  {
+    "title": "arroz",
+    "description": "no se pasa",
+    "code": "abc128",
+    "price": 1450,
+    "status": "true",
+    "stock": 70,
+    "category": "Cat C",
+    "thumbnail": [
+      {
+        "imagen1": "enlace1"
+      }
+    ],
+    "id": 8
+  },
+  {
+    "title": "aceite",
+    "description": "oliva",
+    "code": "abc129",
+    "price": 2000,
+    "status": "true",
+    "stock": 10,
+    "category": "Cat C",
+    "thumbnail": [
+      {
+        "imagen1": "enlace1"
+      }
+    ],
+    "id": 9
+  },
+  {
+    "title": "vinagre",
+    "description": "manzana",
+    "code": "abc130",
+    "price": 500,
+    "status": "true",
+    "stock": 15,
+    "category": "Cat C",
+    "thumbnail": [
+      {
+        "imagen1": "enlace1"
+      }
+    ],
+    "id": 10
+  }
+]
