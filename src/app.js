@@ -1,11 +1,11 @@
 import express from "express";
-import productsRouter from "./routes/products.router.js";
-import cartsRouter from "./routes/carts.router.js";
-import hdsRouter from "./routes/handlebars.router.js"
+import productsRouter from "./routes/products.routes.js";
+import cartsRouter from "./routes/carts.routes.js";
+import hdsRouter from "./routes/handlebars.routes.js"
 import exphbs from "express-handlebars";
 import __dirname from "./utils.js";
 import * as path from "path";
-import {Server} from "socket.io";
+import { Server } from "socket.io";
 import ProductManager from "./controllers/product-manager.js";
 
 const app = express();
@@ -18,7 +18,7 @@ app.use(express.json());
 app.use("/", express.static(__dirname + "/public"));
 
 
-app.engine("handlebars",exphbs.engine());
+app.engine("handlebars", exphbs.engine());
 app.set("view engine", "handlebars");
 app.set("views", path.resolve(__dirname + "/views"));
 
@@ -34,19 +34,18 @@ const server = app.listen(PORT, () => {
 
 const io = new Server(server);
 
-io.on("connection", async(socket) =>{
+io.on("connection", async (socket) => {
   console.log("Cliente Conectado")
   socket.emit("productos", await productManager.readProduct());
-  
-  socket.on("elimiarProducto", async (id)=>{
-    console.log(id)
+
+  socket.on("eliminarProducto", async (id) => {
     await productManager.deleteProductById(id);
-    io.socket.emit("productos", await productManager.getProducts());
+    io.sockets.emit("productos", await productManager.getProducts());
   })
 
-  socket.on("agregarProducto", async (producto)=>{
+  socket.on("agregarProducto", async (producto) => {
     await productManager.addProduct(producto);
-    io.socket.emit("productos", await productManager.getProducts());
+    io.sockets.emit("productos", await productManager.getProducts());
   })
 
 });
