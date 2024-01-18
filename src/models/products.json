@@ -148,5 +148,38 @@
       }
     ],
     "id": 10
+  },
+  {
+    "title": "manzana",
+    "description": "acida",
+    "code": "abc141",
+    "price": "145",
+    "status": true,
+    "stock": "15",
+    "category": "Categoria E",
+    "thumbnail": "Sin Imagen",
+    "id": 11
+  },
+  {
+    "title": "pera",
+    "description": "jugosa",
+    "code": "abc151",
+    "price": "150",
+    "status": true,
+    "stock": "20",
+    "category": "Categoria E",
+    "thumbnail": "Sin Imagen",
+    "id": 12
+  },
+  {
+    "title": "",
+    "description": "",
+    "code": "",
+    "price": "",
+    "status": true,
+    "stock": "",
+    "category": "",
+    "thumbnail": "Sin Imagen",
+    "id": 13
   }
 ]

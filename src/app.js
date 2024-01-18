@@ -39,13 +39,14 @@ io.on("connection", async(socket) =>{
   socket.emit("productos", await productManager.readProduct());
   
   socket.on("elimiarProducto", async (id)=>{
+    console.log(id)
     await productManager.deleteProductById(id);
-    io.socket.emit("productos", await productManager.readProduct());
+    io.socket.emit("productos", await productManager.getProducts());
   })
 
   socket.on("agregarProducto", async (producto)=>{
     await productManager.addProduct(producto);
-    io.socket.emit("productos", await productManager.readProduct());
+    io.socket.emit("productos", await productManager.getProducts());
   })
 
 });
