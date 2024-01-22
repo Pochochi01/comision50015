@@ -7,6 +7,7 @@ socket.on("productos", (data) => {
 //Función para renderizar la tabla de productos:
 const renderProductos = (productos) => {
     const contenedorProductos = document.getElementById("contenedorProductos");
+    contenedorProductos.classList.add("contenedorCards");
     contenedorProductos.innerHTML = "";
 
 
@@ -15,10 +16,10 @@ const renderProductos = (productos) => {
         card.classList.add("card");
         //Agregamos boton para eliminar: 
         card.innerHTML = `
-                <p>Id ${item.id} </p>
-                <p>Titulo ${item.title} </p>
-                <p>Precio ${item.price} </p>
-                <button> Eliminar Producto </button>
+                <p class ="p1">Id ${item.id} </p>
+                <p class ="p2">Titulo ${item.title} </p>
+                <p class ="p2">Precio ${item.price} </p>
+                <button class ="buttons"> Eliminar Producto </button>
         
         `;
         contenedorProductos.appendChild(card);
