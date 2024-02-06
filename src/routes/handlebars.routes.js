@@ -1,11 +1,11 @@
 import express from "express"
 const router = express.Router(); 
-import ProductManager from "../controllers/product-manager.js";
-const productManager = new ProductManager("./src/models/productos.json");
+import ProductManager from "../dao/db/product-manager-db.js";
+const productManager = new ProductManager();
 
 router.get("/", async (req, res) => {
     try {
-        const productos = await productManager.readProduct();
+        const productos = await productManager.getProducts();
         res.render("index", {
             productos: productos
         });

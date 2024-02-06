@@ -5,12 +5,13 @@ import hdsRouter from "./routes/handlebars.routes.js"
 import exphbs from "express-handlebars";
 import __dirname from "./utils.js";
 import * as path from "path";
-import { Server } from "socket.io";
-import ProductManager from "./controllers/product-manager.js";
+import ProductManager from "./dao/db/product-manager-db.js";
+import connectMongoose from "./dao/db/database.js";
 
 const app = express();
 const PORT = 8080;
-const productManager = new ProductManager("./src/models/products.json");
+connectMongoose;
+const productManager = new ProductManager();
 
 
 app.use(express.urlencoded({ extended: true }));
@@ -27,27 +28,9 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", hdsRouter);
 
-
-const server = app.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Escuchando en http://localhost:${PORT}`);
 })
 
-const io = new Server(server);
-
-io.on("connection", async (socket) => {
-  console.log("Cliente Conectado")
-  socket.emit("productos", await productManager.readProduct());
-
-  socket.on("eliminarProducto", async (id) => {
-    await productManager.deleteProductById(id);
-    io.sockets.emit("productos", await productManager.getProducts());
-  })
-
-  socket.on("agregarProducto", async (producto) => {
-    await productManager.addProduct(producto);
-    io.sockets.emit("productos", await productManager.getProducts());
-  })
-
-});
 
 

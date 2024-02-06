@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
-import CartManager from "../controllers/cart-manager.js";
-const manager = new CartManager("./src/models/carrito.json");
+import CartManager from "../dao/db/cart-manager-db.js";
+const manager = new CartManager();
 
 router.post("/", async (req, res) => {
     res.send(await manager.addCart());
