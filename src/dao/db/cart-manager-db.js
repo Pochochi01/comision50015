@@ -11,9 +11,9 @@ class CartManager{
         }
     }
 
-    async getCartByID(id){
+    async getCartById(id){
         try {
-            const cart = new CartModel.findById(id);
+            const cart = await CartModel.findById(id);
             if(!cart){
                 console.log("No se encontro el carrito");
                 return null;
@@ -27,7 +27,7 @@ class CartManager{
 
     async addProductToCart(cid,pid, quantity = 1){
         try {
-            const cart = await this.getCartByID(cid);
+            const cart = await this.getCartById(cid);
             const productExist = cart.products.find(item => item.product.toString() === pid);
             if (productExist){
                 productExist.quantity += quantity;

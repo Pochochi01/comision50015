@@ -11,15 +11,20 @@ import connectMongoose from "./dao/db/database.js";
 const app = express();
 const PORT = 8080;
 connectMongoose;
-const productManager = new ProductManager();
+//const productManager = new ProductManager();
 
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/", express.static(__dirname + "/public"));
 
-
-app.engine("handlebars", exphbs.engine());
+const hbs = exphbs.create({
+  runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true,
+  },
+})
+app.engine("handlebars", exphbs.engine);
 app.set("view engine", "handlebars");
 app.set("views", path.resolve(__dirname + "/views"));
 

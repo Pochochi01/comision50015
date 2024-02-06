@@ -1,26 +1,43 @@
 import express from "express";
 const router = express.Router();
 import CartManager from "../dao/db/cart-manager-db.js";
-const manager = new CartManager();
+const cartManager = new CartManager();
 
 router.post("/", async (req, res) => {
-    res.send(await manager.addCart());
-})
-
-router.get("/", async (req, res) => {
-    res.send(await manager.readCart());
+try {
+    const newCart = await cartManager.createCart();
+    res.json(newCart)    ;
+} catch (error) {
+    console.error("error al crear el carrito", error);
+    res.status(500).json({error: "error interno del servidor"});
+}
 })
 
 router.get("/:id", async (req,res) => {
-    let id = parseInt(req.params.id);
-    res.send(await manager.getCartById(id));
+    const id = req.params.id;
+    try {
+        const cartById = await cartManager.getCartById(id);
+        res.json(cartById)    
+    } catch (error) {
+        console.error("error al obtener el carrito",error);
+        res.status(500).json({error: "error interno del servidor"});
+    }
+    
+
 })
 
 router.post("/:cid/products/:pid", async(req,res) => {
-    let cartId = parseInt(req.params.cid);
-    let productId = parseInt(req.params.pid);
+    let cartId = req.params.cid;
+    let productId = req.params.pid;
     let quantity = req.body.quantity || 1;
-    res.send(await manager.addProductToCart(cartId,productId, quantity));
+    try {
+        const productToCart = await cartManager.addProductToCart(cartId,productId, quantity); 
+        res.json(productToCart.products);
+    } catch (error) {
+        console.error("error al agregar productos al carrito",error);
+        res.status(500).json({error: "error interno del servidor"});
+    }
+    
 }) 
 
 export default router;

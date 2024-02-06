@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
 
-const productsCollection = "products";
-
 const productsSchema = new mongoose.Schema({
     title: {
         type:String,
@@ -33,7 +31,7 @@ const productsSchema = new mongoose.Schema({
         required:true
     },
     thumbnail:{
-        type:String,
+        type:[String],
     }
 });
 
