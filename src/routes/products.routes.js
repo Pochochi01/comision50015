@@ -1,11 +1,10 @@
 import express from "express";
-//import productManager from "../dao/models/products.models.js";
 import ProductManager from "../dao/db/product-manager-db.js";
 
 
 const router = express.Router();
 const productManager = new ProductManager();
-
+/*
 //////////////    MONGOOSE     //////////////
 
 router.get("/mongoose", async (req, res) => {
@@ -44,17 +43,25 @@ router.delete("/mongoose/:pid", async (req, res) => {
     let result = await productManager.deleteOne({ _id: pid })
     res.send({ status: "success", productDelete: result })
 })
-///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////*/
 
 router.get("/", async (req, res) => {
     try {
-        let limit = req.query.limit;
-        const product = await productManager.getProducts();
-        if (limit) {
-            res.json(product.slice(0, limit));
-        } else {
-            res.json(product);
-        }
+        const limit = req.query.limit || 1;
+        const page = req.query.page || 2;
+        
+        const product = await productManager.getProducts(limit, page);
+        console.log(product)
+        res.render("index", {prod: product,
+            hasPrevPage: product.hasPrevPage,
+            hasNextPage: product.hasNextPage,
+            prevPage: product.prevPage,
+            nextPage: product.nextPage,
+            currentPage: product.page,
+            totalPages: product.totalPages,
+            limit: product.limit
+        })
+
     } catch (error) {
         console.log("error al obtener producto", error);
         res.status(500).json({
@@ -101,9 +108,9 @@ router.post("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
 
-        const id = req.params.id;
-        const modifyProduct = req.body;
-        try {
+    const id = req.params.id;
+    const modifyProduct = req.body;
+    try {
         await productManager.updateProductById(id, modifyProduct);
         res.send({ status: "Success", message: "Producto Actualizado" });
     } catch (error) {
@@ -115,7 +122,7 @@ router.put("/:id", async (req, res) => {
 })
 
 router.delete("/:id", async (req, res) => {
-    const id  = req.params.id;
+    const id = req.params.id;
     try {
         await productManager.deleteProductById(id);
         res.send({ status: "Success", message: "Producto Eliminado" });

@@ -1,10 +1,10 @@
 <h1>Mis productos</h1>
 <div class="contenedorCards">
-    {{#each productos}}
+    {{#each prod.docs}}
     <div class="card">
-        <figure>
+        {{!-- <figure>
             <img src={{this.thumbnails.imagen1}}>
-        </figure>
+        </figure> --}}
         <div class="contenido">
             <h3>{{this.title}} </h3>
             <p>{{this.description}} </p>
@@ -13,3 +13,12 @@
     </div>
     {{/each}}
 </div>
+{{#if hasNextPage}}
+    <a href="/api/products/?limit={{limit}}&page={{nextPage}}"> Siguiente </a>
+{{/if}}
+
+{{#if hasPrevPage}}
+    <a href="/api/products/?limit={{limit}}&page={{prevPage}}"> Anterior </a>
+{{/if}}
+
+<p>Pagina {{currentPage}} de {{totalPages}}</p>

@@ -5,8 +5,9 @@ import hdsRouter from "./routes/handlebars.routes.js"
 import exphbs from "express-handlebars";
 import __dirname from "./utils.js";
 import * as path from "path";
-import ProductManager from "./dao/db/product-manager-db.js";
+import MessageModel from "./dao/models/message.models.js";
 import connectMongoose from "./dao/db/database.js";
+//import  { socket }  from "socket.io";
 
 const app = express();
 const PORT = 8080;
@@ -24,7 +25,7 @@ const hbs = exphbs.create({
     allowProtoMethodsByDefault: true,
   },
 })
-app.engine("handlebars", exphbs.engine);
+app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 app.set("views", path.resolve(__dirname + "/views"));
 
@@ -37,5 +38,16 @@ app.listen(PORT, () => {
   console.log(`Escuchando en http://localhost:${PORT}`);
 })
 
+/* Chat opcional para el trabajo
+
+const io = new socket.Server(httpServer);
 
 
+io.on("conection", (socket) => {
+  console.log("Nuevo Usuario Conectado")
+  socket.on("message", async data => {
+    await MessageModel.create(data);
+    const messages = await MessageModel.find();
+    io.socket.emit("message", messages);
+  })
+})*/

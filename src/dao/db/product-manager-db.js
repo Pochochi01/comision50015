@@ -34,9 +34,12 @@ class ProductManager {
         }
     }
 
-    async getProducts() {
+    async getProducts(limit,page) {
         try {
-            const products = await ProductsModels.find();
+            const products = await ProductsModels.paginate({},{limit,page});
+            const finalProducts = products.docs.map(product =>{
+                const {_id, ...prod} = product.toObject();
+            })
             return products;
         } catch (error) {
             console.log("No se encontraron Productos", error)
