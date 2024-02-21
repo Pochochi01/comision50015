@@ -34,25 +34,56 @@ class ProductManager {
         }
     }
 
-    async getProducts(limit,page) {
+    async getProducts({ limit = 10, page = 1, sort, query } = {}) {
         try {
-            const products = await ProductsModels.paginate({},{limit,page});
-            const finalProducts = products.docs.map(product =>{
-                const {_id, ...prod} = product.toObject();
-            })
-            return products;
+            const skip = (page - 1) * limit;
+            let queryOption = {};
+            if (query) {
+                queryOption = { category: query };
+            }
+            const sortOptions = {};
+            if (sort) {
+                if (sort === 'asc' || sort === 'desc') {
+                    sortOptions.price = sort === 'asc' ? 1 : -1;
+                }
+            }
+
+            const products = await ProductsModels
+                .find(queryOption)
+                .sort(sortOptions)
+                .skip(skip)
+                .limit(limit);
+
+            const totalProducts = await ProductsModels.countDocuments(queryOption);
+
+            const totalPages = Math.ceil(totalProducts / limit);
+            const hasPrevPage = page > 1;
+            const hasNextPage = page < totalPages;
+
+            return {
+                docs: products,
+                totalPages,
+                prevPage: hasPrevPage ? page - 1 : null,
+                nextPage: hasNextPage ? page + 1 : null,
+                page,
+                hasPrevPage,
+                hasNextPage,
+                prevLink: hasPrevPage ? `/api/products?limit=${limit}&page=${page - 1}&sort=${sort}&query=${query}` : null,
+                nextLink: hasNextPage ? `/api/products?limit=${limit}&page=${page + 1}&sort=${sort}&query=${query}` : null,
+            };
         } catch (error) {
-            console.log("No se encontraron Productos", error)
+            console.log("ERROR: No se pudo obtener los productos", error);
+            throw error;
         }
     }
 
-    async getProductsById(id){
+    async getProductsById(id) {
         try {
             const products = await ProductsModels.findById(id)
-            if(!products){
+            if (!products) {
                 console.log("Producto no encontrado");
                 return null;
-            } else{
+            } else {
                 return products;
             }
         } catch (error) {
@@ -60,23 +91,23 @@ class ProductManager {
         }
     }
 
-    async updateProductById(id, body){
+    async updateProductById(id, body) {
         try {
-            const updateProduct = await ProductsModels.findByIdAndUpdate(id,body);
-            if(!updateProduct){
+            const updateProduct = await ProductsModels.findByIdAndUpdate(id, body);
+            if (!updateProduct) {
                 console.log("no se encontro el producto");
                 return null
             } else
-            return updateProduct;
+                return updateProduct;
         } catch (error) {
-            console.log("error al actualizar el producto",error);
+            console.log("error al actualizar el producto", error);
         }
     }
 
-    async deleteProductById(id){
+    async deleteProductById(id) {
         try {
             const deleteProduct = await ProductsModels.findByIdAndDelete(id)
-            if (!deleteProduct){
+            if (!deleteProduct) {
                 console.log("Producto no encontrado");
             } else {
                 console.log("Producto eliminado");

@@ -4,54 +4,19 @@ import ProductManager from "../dao/db/product-manager-db.js";
 
 const router = express.Router();
 const productManager = new ProductManager();
-/*
-//////////////    MONGOOSE     //////////////
-
-router.get("/mongoose", async (req, res) => {
-    try {
-        const products = await productManager.find();
-        res.json(products);
-    } catch (error) {
-        res.status(500).json({ message: "error al conectarse al servidor" })
-    }
-})
-
-router.post("/mongoose", async (req, res) => {
-    try {
-        const newProduct = new productManager(req.body);
-        await newProduct.save();
-        res.send({ resultado: "success", newProduct: newProduct });
-    } catch (error) {
-        res.status(500).json({ message: "error al conectarse al servidor" })
-    }
-})
-
-router.put("/mongoose/:pid", async (req, res) => {
-    let { pid } = req.params;
-    let productReplace = req.body;
-
-    if (!productReplace.title || !productReplace.description || !productReplace.code || !productReplace.price || !productReplace.status || !productReplace.stock || !productReplace.category || !productReplace.thumbnail) {
-        return res.send({ status: "error", error: "Debe completar todos los campos" });
-    } else {
-        let result = await productManager.updateOne({ _id: pid }, productReplace);
-        res.send({ status: "success", productReplace: result });
-    }
-})
-
-router.delete("/mongoose/:pid", async (req, res) => {
-    let { pid } = req.params;
-    let result = await productManager.deleteOne({ _id: pid })
-    res.send({ status: "success", productDelete: result })
-})
-///////////////////////////////////////////////////////*/
 
 router.get("/", async (req, res) => {
     try {
-        const limit = req.query.limit || 1;
-        const page = req.query.page || 2;
+        const { limit = 10, page = 1, sort, query } = req.query;
+
         
-        const product = await productManager.getProducts(limit, page);
-        console.log(product)
+        const product = await productManager.getProducts({
+            limit: parseInt(limit),
+            page: parseInt(page),
+            sort,
+            query,
+        });
+
         res.render("index", {prod: product,
             hasPrevPage: product.hasPrevPage,
             hasNextPage: product.hasNextPage,
@@ -59,7 +24,10 @@ router.get("/", async (req, res) => {
             nextPage: product.nextPage,
             currentPage: product.page,
             totalPages: product.totalPages,
-            limit: product.limit
+            limit: product.limit,
+            prevLink: product.hasPrevPage ? `/api/products?limit=${limit}&page=${product.prevPage}&sort=${sort}&query=${query}` : null,
+            nextLink: product.hasNextPage ? `/api/products?limit=${limit}&page=${product.nextPage}&sort=${sort}&query=${query}` : null,
+
         })
 
     } catch (error) {

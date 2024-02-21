@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import mongoosePaginate from "mongoose-paginate-v2";
 
-const cartSchemma = new mongoose.Schema({
+
+const cartSchema = new mongoose.Schema({
     products: [
         {
             product:{
@@ -17,7 +17,10 @@ const cartSchemma = new mongoose.Schema({
     ]
 });
 
-cartSchemma.plugin(mongoosePaginate);
-const CartModel = mongoose.model("carts", cartSchemma);
+cartSchema.pre('findOne', function (next) {
+    this.populate('products.product', '_id title price');
+    next();
+  });
+const CartModel = mongoose.model("carts", cartSchema);
 
 export default CartModel;
