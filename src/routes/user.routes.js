@@ -11,11 +11,9 @@ router.post("/login",async(req,res)=>{
         const existUser = await UserModel.findOne({email: email});
         console.log(existUser);
         if (existUser){
-            console.log(1)
             return res.status(400).send({message: "Email ya registrado"})
         }
         const newUser = await UserModel.create({first_name, last_name, email, password, age});
-        console.log(2)
         req.session.login = true;
         req.session.user = {...newUser._doc};
         res.status(200).send({message: "Usuario Creado Correctamente"});

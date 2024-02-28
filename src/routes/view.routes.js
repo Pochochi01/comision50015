@@ -1,4 +1,4 @@
-import  express  from "express";
+import express from "express";
 import ProductManager from "../dao/db/product-manager-db.js";
 import CartManager from "../dao/db/cart-manager-db.js"
 
@@ -62,8 +62,41 @@ router.get("/carts/:cid", async (req, res) => {
    } catch (error) {
       console.error("Error al obtener el carrito", error);
       res.status(500).json({ error: "Error interno del servidor" });
-   }
-});
+   }});
 
-export default router; 
+   // Ruta para el formulario de login
+   router.get("/login", (req, res) => {
+      // Verifica si el usuario ya está logueado y redirige a la página de perfil si es así
+      if (req.session.login) {
+         return res.redirect("/api/view/profile");
+      }
+
+      res.render("login");
+   });
+
+   // Ruta para el formulario de registro
+   router.get("/register", (req, res) => {
+      // Verifica si el usuario ya está logueado y redirige a la página de perfil si es así
+      if (req.session.login) {
+         return res.redirect("/profile");
+      }
+      res.render("register");
+   });
+
+   // Ruta para la vista de perfil
+   router.get("/profile", (req, res) => {
+      // Verifica si el usuario está logueado
+      if (!req.session.login) {
+         // Redirige al formulario de login si no está logueado
+         return res.redirect("/login");
+      }
+
+      // Renderiza la vista de perfil con los datos del usuario
+      res.render("profile", { user: req.session.user });
+   });
+
+
+
+
+export default router;
 

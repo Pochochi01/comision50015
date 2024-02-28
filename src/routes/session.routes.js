@@ -11,7 +11,13 @@ router.post("/login", async(req,res)=>{
         if (user){
             if (user.password === password){
                 req.session.login = true;
-                res.status(200).send({message: "Session iniciada correctamente"});
+                req.session.user = {
+                    email: user.email,
+                    age: user.age,
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                };
+                res.redirect("/api/products");
             } else {
                 res.status(401).send({message: "Password incorrecto"});
             }
@@ -27,7 +33,7 @@ router.get("/logout", (req,res)=>{
     if(req.session.login){
         req.session.destroy();
     } 
-        res.status(200).send({message: "login eliminado"});    
-})
+    res.redirect("/api/view/login")
+});
 
 export default router;

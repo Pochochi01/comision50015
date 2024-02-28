@@ -27,7 +27,6 @@ router.get("/", async (req, res) => {
             limit: product.limit,
             prevLink: product.hasPrevPage ? `/api/products?limit=${limit}&page=${product.prevPage}&sort=${sort}&query=${query}` : null,
             nextLink: product.hasNextPage ? `/api/products?limit=${limit}&page=${product.nextPage}&sort=${sort}&query=${query}` : null,
-
         })
 
     } catch (error) {
