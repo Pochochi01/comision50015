@@ -11,6 +11,8 @@ import * as path from "path";
 import connectMongoose from "./dao/db/database.js";
 import cookieParser from "cookie-parser";
 import mongoStore from "connect-mongo";
+import initializePassport from "./config/passport.config.js";
+import passport from "passport";
 
 
 const app = express();
@@ -32,6 +34,9 @@ app.use(session({
 })
 }))
 app.use("/", express.static(__dirname + "/public"));
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 const hbs = exphbs.create({
   runtimeOptions: {
