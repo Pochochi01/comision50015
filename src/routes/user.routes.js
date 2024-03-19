@@ -2,6 +2,7 @@ import  express  from "express";
 import UserModel from "../dao/models/user.models.js";
 import { createHash } from "../utils.js";
 import passport from "passport";
+import generateToken from "../utils/jsonWebToken.js";
 
 
 const router = express.Router();
@@ -33,6 +34,9 @@ router.get("/users", (req,res)=>{
 })
 */
 
+
+//Version para Passport
+/*
 router.post("/login", passport.authenticate("register", { failureRedirect: "/failregister"}), async(req,res)=>{
     if (!req.user)
     return res.status(400).send({status: error, message: "Credenciales Invalidas"});
@@ -48,6 +52,25 @@ router.post("/login", passport.authenticate("register", { failureRedirect: "/fai
 
 router.get("/failregister", (req,res)=>{
     res.send({error: "Registro Fallido"})
+})*/
+
+/// Registro(login) con Json Web Token
+router.post("/", async (req,res)=>{
+    const {first_name, last_name, email, password, age} = req.body;
+try {
+    const userExist = await UserModel.findOne({email:email});
+    if (userExist){
+        return res.status(400).send({status:"error", message: "el email ya esta registrado"})
+    } 
+        const newUser = await UserModel.create({first_name, last_name, email, password: createHash(password), age});
+        const token = generateToken({id: newUser._id,});
+        res.status(200).send({status: "succes",message: "Usuario Creado Correctamente", token});
+    
+} catch (error) {
+    console.log("error en la autenticacion", error);
+    res.status(500).send({status: "error", message: "error interno en el servidor"});
+}
+
 })
 
 export default router;

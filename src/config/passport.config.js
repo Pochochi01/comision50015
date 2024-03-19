@@ -3,9 +3,12 @@ import passportLocal from "passport-local"
 import userModel from "../dao/models/user.models.js";
 import { createHash, isValidPassword } from "../utils.js";
 import passportGithub from "passport-github2";
+import  jwt  from "passport-jwt";
 
 
 const localStrategy = passportLocal.Strategy;
+const JWTStrategy = jwt.Strategy;
+const extractJWT = jwt.ExtractJwt;
 
 const initializePassport = () => {
     passport.use("register", new localStrategy({
@@ -85,6 +88,43 @@ const initializePassport = () => {
         }
     }))
 
+    passport.use("jwt", new JWTStrategy({
+        jwtFromRequest: extractJWT.fromExtractors([cookieExtractor]),
+        secretOrKey: "secretToken",
+    }, async (jwt_payLoad, done)=>{
+        try {
+            return done(null, jwt_payLoad);
+        } catch (error) {
+            return done(error);
+        }
+    })
+    )
+
+
+
+}
+
+const cookieExtractor = req => {
+    let token = null;
+    if (req && req.cookies) {
+        token = req.cookies["cookieOne"]
+    }
+    return token;
+}
+
+export const passportCall = (strategy) => {
+    return async (req,res,next)=>{
+        passport.authenticate(strategy,(error, user, info)=>{
+            if (error){
+                return next(error);
+            }
+            if (!user){
+                res.status(401).send({error: info.message ? info.message : info.toString()})
+            }
+            req.user = user;
+            next();
+        })(req,res,next);
+    }
 }
 
 export default initializePassport;

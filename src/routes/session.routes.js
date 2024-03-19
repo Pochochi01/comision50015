@@ -2,6 +2,7 @@ import express from "express";
 import UserModel from "../dao/models/user.models.js";
 import { isValidPassword } from "../utils.js";
 import passport from "passport";
+import generateToken from "../utils/jsonWebToken.js";
 
 const router = express.Router();
 
@@ -32,6 +33,9 @@ const router = express.Router();
 })
 */
 
+
+/*
+//////Version con Passport/////////
 router.post("/login", passport.authenticate("login", { failureRedirect: "/faillogin" }), 
 async (req,res) => {
     if (!req.user) return res.status(400).send({ status: "error", message: "credenciales invalidas" });
@@ -67,6 +71,31 @@ router.get("/githubcallback", passport.authenticate("github",{failureRedirect:"/
     req.session.user = req.user;
     req.session.login = true;
     res.redirect("/api/view/profile")
+})
+*/
+
+router.post("/login", async (req,res)=>{
+    const {email,password} = req.body;
+    try {
+        const userUnique = await UserModel.findOne({email:email});
+        if (!userUnique){
+            return res.status(400).send({status:"error", message: "usuario inexistente"})
+        }
+        if (!isValidPassword(password,userUnique)){
+            return res.status(500).send({status:"error", message:"contraseña incorrecta"})
+        }
+        const token = generateToken({
+            first_name: userUnique.first_name,
+            last_name: userUnique.last_name,
+            email: userUnique.email,
+            id: userUnique._id
+        });
+        //res.send({status:"succes",token});
+        res.cookie("cookieOne", token,{maxAge:60*60*1000}).send({message: "login exitoso"});
+    } catch (error) {
+        console.log("error en la autenticacion", error);
+        res.status(500).send({status: "error", message: "error interno en el servidor"})
+    }
 })
 
 export default router;

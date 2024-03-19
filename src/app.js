@@ -1,6 +1,7 @@
 import express from "express";
 import session from "express-session";
 import productsRouter from "./routes/products.routes.js";
+import currentsRouter from "./routes/currents.routes.js"
 import cartsRouter from "./routes/carts.routes.js";
 import userRouter from "./routes/user.routes.js"
 import viewRouter from "./routes/view.routes.js";
@@ -56,7 +57,7 @@ app.use("/api/carts", cartsRouter);
 app.use("/api/view", viewRouter);
 app.use("/api/users", userRouter);
 app.use("/api/session", sessionRouter);
-
+app.use("/api/currents", currentsRouter);
 
 app.listen(PORT, () => {
   console.log(`Escuchando en http://localhost:${PORT}`);
