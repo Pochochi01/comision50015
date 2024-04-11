@@ -1,11 +1,19 @@
 import express from "express";
-import ProductManager from "../dao/db/product-manager-db.js";
+//import ProductManager from "../dao/db/product-manager-db.js";
+import ProductController from "../controllers/product.controller.js";
+
 
 
 const router = express.Router();
-const productManager = new ProductManager();
+const productController = new ProductController();
 
-router.get("/", async (req, res) => {
+router.get("/", productController.getProducts);
+router.get("/:pid", productController.getProductsById);
+/*router.post("/", productManager.addProduct);
+router.put("/:id",productManager.updateProductById);
+router.delete("/:id", productManager.deleteProductById);*/
+
+/*router.get("/", async (req, res) => {
     try {
         const { limit = 10, page = 1, sort, query } = req.query;
 
@@ -36,7 +44,7 @@ router.get("/", async (req, res) => {
             error: "Error en el servidor"
         });
     }
-})
+})*/
 
 
 router.get("/:pid", async (req, res) => {

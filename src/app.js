@@ -9,7 +9,7 @@ import sessionRouter from "./routes/session.routes.js"
 import exphbs from "express-handlebars";
 import __dirname from "./utils.js";
 import * as path from "path";
-import connectMongoose from "./dao/db/database.js";
+import "./dao/db/database.js";
 import cookieParser from "cookie-parser";
 import mongoStore from "connect-mongo";
 import initializePassport from "./config/passport.config.js";
@@ -18,7 +18,7 @@ import passport from "passport";
 
 const app = express();
 const PORT = 8080;
-connectMongoose;
+
 //const productManager = new ProductManager();
 
 

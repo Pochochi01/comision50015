@@ -88,10 +88,11 @@ router.post("/login", async (req,res)=>{
             first_name: userUnique.first_name,
             last_name: userUnique.last_name,
             email: userUnique.email,
-            id: userUnique._id
+            id: userUnique._id,
+            role: "user"
         });
         //res.send({status:"succes",token});
-        res.cookie("cookieOne", token,{maxAge:60*60*1000}).send({message: "login exitoso"});
+        res.cookie("cookieOne", token,{maxAge:60*60*1000, httpOnly:true}).send({message: "login exitoso"});
     } catch (error) {
         console.log("error en la autenticacion", error);
         res.status(500).send({status: "error", message: "error interno en el servidor"})
